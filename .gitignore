@@ -1,8 +1,27 @@
+# Dependencies
 node_modules
+
+# Environment files (keep the templates)
 .env
-.env.local
+.env.*
+!.env.example
+
+# Build output and caches
 dist
+coverage
+.vite
+.eslintcache
+
+# Uploaded files (keep the folder)
 server/uploads/*
 !server/uploads/.gitkeep
-.DS_Store
+
+# Logs
 *.log
+npm-debug.log*
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

@@ -14,7 +14,7 @@ import { ApiError } from './utils/ApiError.js';
 const app = express();
 
 app.disable('x-powered-by');
-// Number of reverse proxies in front of the API (1 = Render/Railway only, 2 = Vercel/Netlify proxy + host)
+// Number of reverse proxies in front of the API (1 = Render/Railway only, 2 = Vercel proxy + host)
 app.set('trust proxy', env.trustProxy);
 
 // Images in /uploads must be embeddable by the frontend on another origin.

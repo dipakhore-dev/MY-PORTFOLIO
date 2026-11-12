@@ -6,7 +6,7 @@
 Visitor's browser
    │  https://your-site.vercel.app           (React app, static files)
    ▼
-Vercel / Netlify ── /api/* proxied ──▶ Render / Railway (Express API) ──▶ MongoDB Atlas
+Vercel ── /api/* proxied ──▶ Render / Railway (Express API) ──▶ MongoDB Atlas
                                               │
                                               └──▶ Cloudinary (images, resume)  +  Resend (email)
 ```
@@ -17,7 +17,7 @@ The site proxies `/api/*` to the API, so the browser only ever talks to **one or
 
 ## Before you start
 
-You need free accounts on: **GitHub**, **MongoDB Atlas**, **Cloudinary**, **Resend** (email), **Render** (or Railway) and **Vercel** (or Netlify).
+You need free accounts on: **GitHub**, **MongoDB Atlas**, **Cloudinary**, **Resend** (email), **Render** (or Railway) and **Vercel**.
 
 Choose a region close to your visitors and keep the API and database in the same area (for India, Render's Singapore region and an Atlas region nearby).
 
@@ -129,9 +129,9 @@ Environment variables set this way override the values in your local `.env` file
 
 ## 7. Deploy the frontend
 
-**Before deploying**, replace `YOUR-API-NAME.onrender.com` in `client/vercel.json` (or `client/netlify.toml`) with your API's real host name. These rewrites forward `/api/*` and `/sitemap.xml` to the API, then send every other path to `index.html` so deep links and refreshes work.
+**Before deploying**, replace `YOUR-API-NAME.onrender.com` in `client/vercel.json` with your API's real host name. These rewrites forward `/api/*` and `/sitemap.xml` to the API, then send every other path to `index.html` so deep links and refreshes work.
 
-### Option A: Vercel
+### Vercel
 
 1. **Add New → Project**, import your repository.
 2. Set **Root Directory** to `client` (the Vite preset is detected automatically).
@@ -144,13 +144,6 @@ Environment variables set this way override the values in your local `.env` file
 
 4. Deploy.
 
-### Option B: Netlify
-
-1. **Add new site → Import an existing project**, select your repository.
-2. Set **Base directory** to `client`. The build command (`npm run build`) and publish directory (`dist`) come from `netlify.toml`.
-3. Add the same two environment variables (`VITE_API_URL=/api`, `VITE_SITE_URL=...`).
-4. Deploy.
-
 Vite bakes `VITE_*` variables in at build time, so **redeploy after changing them**.
 
 ## 8. Connect the two sides
@@ -161,7 +154,7 @@ Vite bakes `VITE_*` variables in at build time, so **redeploy after changing the
 
 ## 9. Custom domain (optional)
 
-Add the domain in Vercel/Netlify (**Domains**) and follow its DNS instructions. Then update `CLIENT_URL`, `SITE_URL` and `VITE_SITE_URL` to the new address and redeploy.
+Add the domain in Vercel (**Domains**) and follow its DNS instructions. Then update `CLIENT_URL`, `SITE_URL` and `VITE_SITE_URL` to the new address and redeploy.
 
 ## 10. Verify the deployment
 
@@ -199,8 +192,6 @@ A React app is built in the browser, but the bots that create link previews do n
    - Facebook and WhatsApp: [Sharing Debugger](https://developers.facebook.com/tools/debug/) (click **Scrape Again**)
 5. Upload a project cover image in the admin dashboard: that image becomes the preview picture (cropped to 1200x630 when it is hosted on Cloudinary). Projects without one use `og-image.png`.
 
-Netlify does not support matching on the visitor's browser in `netlify.toml`, so this step is Vercel-only.
-
 ## Alternative: no proxy (cross-site cookies)
 
 If you would rather call the API directly: set `VITE_API_URL=https://<your-api-host>/api` on the frontend, leave `COOKIE_SAMESITE` empty (it defaults to `none` in production) and set `TRUST_PROXY=1` on the API, and remove the `/api` rewrite. **Safari and some privacy settings block these cross-site cookies, so admin login can fail there.** The proxy setup above avoids this.
@@ -217,12 +208,12 @@ If you would rather call the API directly: set `VITE_API_URL=https://<your-api-h
 | API cannot connect to MongoDB | Atlas Network Access does not allow the host's IP, or the password has unencoded special characters. |
 | Contact form works but no email arrives | Check the API logs for "Contact email failed". On Render free, SMTP is blocked: use Resend. With the default sender you can only email your own Resend account address. |
 | Uploaded images disappear after a deploy | Cloudinary variables are missing, so files went to the temporary disk. |
-| Refreshing `/blog/my-post` shows a 404 page from the host | The SPA fallback rewrite is missing (check `vercel.json` / `netlify.toml` is in the Root/Base directory). |
+| Refreshing `/blog/my-post` shows a 404 page from the host | The SPA fallback rewrite is missing (check that `vercel.json` is in the Root Directory). |
 | Shared link shows the wrong preview or no image | Check step 11: test with `curl.exe -A "LinkedInBot/1.0" <url>`. If you see the React page, the bot rewrites are missing or use the wrong API host. If the tags are right, clear the platform's cache with its debugger tool. |
 | Resume button shows an error | No resume uploaded yet (Admin → Profile & resume) or `RESUME_URL` points nowhere. |
 
 ## Updating the site later
 
 - **Content:** use the admin dashboard; no redeploy is needed.
-- **Code:** push to `main`; Vercel/Netlify and Render rebuild automatically.
+- **Code:** push to `main`; Vercel and Render rebuild automatically.
 - **Backups:** the free Atlas tier has no automated backups. Export occasionally with `mongodump`, or upgrade the cluster.
