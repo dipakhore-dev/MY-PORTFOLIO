@@ -220,6 +220,16 @@ describe('experience', () => {
     expect(res.body.total).toBe(1);
     expect(res.body.data[0].title).toBe('BSc');
   });
+
+  it('accepts the internship type and rejects unknown types', async () => {
+    const ok = await as('post', '/api/experience').send({ ...entry, title: 'Intern', type: 'internship' });
+    expect(ok.status).toBe(201);
+    expect(ok.body.data.type).toBe('internship');
+    const list = await request(app).get('/api/experience?type=internship');
+    expect(list.body.total).toBe(1);
+    const bad = await as('post', '/api/experience').send({ ...entry, type: 'volunteer' });
+    expect(bad.status).toBe(400);
+  });
 });
 
 describe('posts', () => {

@@ -15,5 +15,7 @@ export const resumeUrl = `${apiBase}/resume`;
 
 export const getProfile = (signal) => get('/profile', undefined, signal);
 
-export const getGithub = (signal) => get('/github', undefined, signal);
+// Longer timeout than the default: the API may be waking from a free-tier sleep and then calls GitHub
+export const getGithub = (signal) =>
+  api.get('/github', { signal, timeout: 45000 }).then((res) => res.data);
 export const getResumeInfo = (signal) => get('/resume/info', undefined, signal);

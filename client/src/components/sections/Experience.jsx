@@ -16,9 +16,16 @@ function Timeline({ items }) {
             className="absolute -left-[41px] top-6 h-4 w-4 rounded-full border-4 border-white bg-brand-600 ring-2 ring-brand-600/30 dark:border-slate-950"
           />
           <div className="card p-6 transition hover:border-brand-500/50 hover:shadow-lg">
-            <p className="inline-flex rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700 dark:bg-brand-500/10 dark:text-brand-300">
-              {formatRange(item.startDate, item.endDate, item.current)}
-            </p>
+            <div className="flex flex-wrap items-center gap-2">
+              <p className="inline-flex rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700 dark:bg-brand-500/10 dark:text-brand-300">
+                {formatRange(item.startDate, item.endDate, item.current)}
+              </p>
+              {item.type === 'internship' && (
+                <span className="inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+                  Internship
+                </span>
+              )}
+            </div>
             <h3 className="mt-3 text-lg font-semibold text-slate-900 dark:text-white">{item.title}</h3>
             <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
               {item.organization}
@@ -69,7 +76,7 @@ export default function Experience() {
       >
         <Body
           {...shared}
-          items={items.filter((i) => i.type === 'work')}
+          items={items.filter((i) => i.type === 'work' || i.type === 'internship')}
           emptyText="Work experience will appear here."
         />
       </Section>

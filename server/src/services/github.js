@@ -7,8 +7,8 @@ const requestHeaders = (token) => ({
   ...(token && { Authorization: `Bearer ${token}` }),
 });
 
-const getJson = async (url, token) => {
-  const res = await fetch(url, { headers: requestHeaders(token), signal: AbortSignal.timeout(8000) });
+const getJson = async (url, token, timeoutMs = 8000) => {
+  const res = await fetch(url, { headers: requestHeaders(token), signal: AbortSignal.timeout(timeoutMs) });
   if (!res.ok) {
     const error = new Error(`GitHub responded with ${res.status}`);
     error.status = res.status;
@@ -36,7 +36,9 @@ export const fetchGithubSummary = async (username, token) => {
   const results = await Promise.allSettled(
     own
       .slice(0, 30)
-      .map((repo) => getJson(`${API}/repos/${name}/${encodeURIComponent(repo.name)}/languages`, token)),
+      .map((repo) =>
+        getJson(`${API}/repos/${name}/${encodeURIComponent(repo.name)}/languages`, token, 4000),
+      ),
   );
 
   const bytes = {};

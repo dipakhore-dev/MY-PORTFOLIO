@@ -8,6 +8,7 @@ const fields = [
     type: 'select',
     options: [
       { value: 'work', label: 'Work' },
+      { value: 'internship', label: 'Internship' },
       { value: 'education', label: 'Education' },
     ],
   },
