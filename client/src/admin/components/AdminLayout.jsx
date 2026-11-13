@@ -1,6 +1,7 @@
 import {
   Briefcase,
   ExternalLink,
+  GraduationCap,
   FileText,
   FolderKanban,
   KeyRound,
@@ -22,6 +23,7 @@ const nav = [
   { to: '/admin/projects', label: 'Projects', icon: FolderKanban },
   { to: '/admin/skills', label: 'Skills', icon: Wrench },
   { to: '/admin/experience', label: 'Experience', icon: Briefcase },
+  { to: '/admin/education', label: 'Education', icon: GraduationCap },
   { to: '/admin/posts', label: 'Blog posts', icon: FileText },
   { to: '/admin/messages', label: 'Messages', icon: Mail },
   { to: '/admin/profile', label: 'Profile & resume', icon: User },

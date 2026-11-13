@@ -5,6 +5,7 @@ import { AuthProvider } from './context/AuthContext';
 import { ToastProvider } from './context/ToastContext';
 import Account from './pages/Account';
 import Dashboard from './pages/Dashboard';
+import EducationPage from './pages/EducationPage';
 import ExperiencePage from './pages/ExperiencePage';
 import Login from './pages/Login';
 import Messages from './pages/Messages';
@@ -26,6 +27,7 @@ export default function AdminApp() {
             <Route path="projects" element={<Projects />} />
             <Route path="skills" element={<Skills />} />
             <Route path="experience" element={<ExperiencePage />} />
+            <Route path="education" element={<EducationPage />} />
             <Route path="posts" element={<Posts />} />
             <Route path="messages" element={<Messages />} />
             <Route path="profile" element={<ProfilePage />} />

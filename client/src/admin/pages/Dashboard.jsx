@@ -11,7 +11,7 @@ import PageHeader from '../components/PageHeader';
 const cards = [
   { key: 'projects', label: 'Projects', to: '/admin/projects', icon: FolderKanban },
   { key: 'skills', label: 'Skills', to: '/admin/skills', icon: Wrench },
-  { key: 'experience', label: 'Experience entries', to: '/admin/experience', icon: Briefcase },
+  { key: 'experience', label: 'Experience & education', to: '/admin/experience', icon: Briefcase },
   { key: 'posts', label: 'Blog posts', to: '/admin/posts', icon: FileText },
 ];
 

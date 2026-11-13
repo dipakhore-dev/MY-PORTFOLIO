@@ -9,18 +9,19 @@ const fields = [
     options: [
       { value: 'work', label: 'Work' },
       { value: 'internship', label: 'Internship' },
-      { value: 'education', label: 'Education' },
     ],
   },
   { name: 'order', label: 'Display order', type: 'number', default: 0, help: 'Lower numbers appear first.' },
-  { name: 'title', label: 'Title / degree', type: 'text', required: true, min: 2, max: 120 },
-  { name: 'organization', label: 'Company / school', type: 'text', required: true, min: 2, max: 120 },
+  { name: 'title', label: 'Job title / role', type: 'text', required: true, min: 2, max: 120 },
+  { name: 'organization', label: 'Company', type: 'text', required: true, min: 2, max: 120 },
   { name: 'location', label: 'Location', type: 'text', max: 120 },
   { name: 'startDate', label: 'Start date', type: 'date', required: true },
-  { name: 'current', label: 'I currently work / study here', type: 'checkbox', default: false },
+  { name: 'current', label: 'I currently work here', type: 'checkbox', default: false },
   { name: 'endDate', label: 'End date', type: 'date', showIf: (v) => !v.current },
   { name: 'description', label: 'Description', type: 'textarea', max: 2000, rows: 4 },
 ];
+
+const isExperience = (entry) => entry.type !== 'education';
 
 const columns = [
   {
@@ -41,8 +42,9 @@ export default function ExperiencePage() {
     <ResourceManager
       title="Experience"
       singular="Entry"
-      description="Work history and education shown as timelines."
+      description="Work and internship history shown in the Experience timeline."
       resource="experience"
+      filter={isExperience}
       columns={columns}
       fields={fields}
       itemLabel={(e) => e.title}

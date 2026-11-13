@@ -14,7 +14,18 @@ import PageHeader from './PageHeader';
  * Generic list + create/edit modal + delete confirmation for one REST resource.
  * columns: [{ label, render(item), className }]
  */
-export default function ResourceManager({ title, singular, description, resource, columns, fields, itemLabel }) {
+export default function ResourceManager({
+  title,
+  singular,
+  description,
+  resource,
+  columns,
+  fields,
+  itemLabel,
+  params,
+  filter,
+  fixedValues,
+}) {
   const api = useMemo(() => resourceApi(resource), [resource]);
   const toast = useToast();
   const [state, setState] = useState({ items: [], total: 0, loading: true, error: '' });
@@ -24,23 +35,24 @@ export default function ResourceManager({ title, singular, description, resource
 
   const load = useCallback(async () => {
     try {
-      const res = await api.list();
+      const res = await api.list(params);
       setState({ items: res.data, total: res.total, loading: false, error: '' });
     } catch (err) {
       setState((s) => ({ ...s, loading: false, error: getErrorMessage(err) }));
     }
-  }, [api]);
+  }, [api, params]);
 
   useEffect(() => {
     load();
   }, [load]);
 
   const handleSave = async (payload) => {
+    const body = { ...payload, ...fixedValues };
     if (editing === 'new') {
-      await api.create(payload);
+      await api.create(body);
       toast.success(`${singular} created`);
     } else {
-      await api.update(editing._id, payload);
+      await api.update(editing._id, body);
       toast.success(`${singular} updated`);
     }
     setEditing(null);
@@ -61,7 +73,9 @@ export default function ResourceManager({ title, singular, description, resource
     }
   };
 
-  const { items, total, loading, error } = state;
+  const { total, loading, error } = state;
+  const loaded = state.items.length;
+  const items = filter ? state.items.filter(filter) : state.items;
 
   return (
     <>
@@ -145,9 +159,9 @@ export default function ResourceManager({ title, singular, description, resource
               ))}
             </tbody>
           </table>
-          {total > items.length && (
+          {total > loaded && (
             <p className="border-t border-slate-100 px-4 py-3 text-xs text-slate-500 dark:border-slate-800">
-              Showing the first {items.length} of {total}.
+              Showing the first {loaded} of {total}.
             </p>
           )}
         </div>
