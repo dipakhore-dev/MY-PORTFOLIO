@@ -3,6 +3,7 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 import app from '../src/app.js';
 import { githubCache, usernameFrom } from '../src/controllers/githubController.js';
 import { Profile } from '../src/models/Profile.js';
+import { fetchGithubSummary } from '../src/services/github.js';
 import { clearDb, connect, disconnect } from './helpers/db.js';
 
 const json = (data, status = 200) => ({ ok: status < 400, status, json: async () => data });
@@ -182,5 +183,39 @@ describe('GET /api/resume/info', () => {
     expect(res.status).toBe(200);
     expect(typeof res.body.available).toBe('boolean');
     if (res.body.available) expect(res.body.previewUrl).toMatch(/^https?:\/\//);
+  });
+});
+
+describe('GitHub service resilience', () => {
+  afterEach(() => vi.unstubAllGlobals());
+
+  it('retries without the token when GitHub rejects it with 401', async () => {
+    const base = fakeGithub();
+    const fetchMock = vi.fn(async (url, options) =>
+      options.headers.Authorization ? json({}, 401) : base(url, options),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    const data = await fetchGithubSummary('dipak', 'bad-token');
+    expect(data.publicRepos).toBe(3);
+    expect(fetchMock.mock.calls.some(([, o]) => !o.headers.Authorization)).toBe(true);
+  });
+
+  it('retries once after a temporary failure', async () => {
+    const base = fakeGithub();
+    let first = true;
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (url, options) => {
+        if (first) {
+          first = false;
+          throw new TypeError('connection reset');
+        }
+        return base(url, options);
+      }),
+    );
+
+    const data = await fetchGithubSummary('dipak');
+    expect(data.username).toBe('dipak');
   });
 });

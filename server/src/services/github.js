@@ -7,7 +7,7 @@ const requestHeaders = (token) => ({
   ...(token && { Authorization: `Bearer ${token}` }),
 });
 
-const getJson = async (url, token, timeoutMs = 8000) => {
+const fetchOnce = async (url, token, timeoutMs) => {
   const res = await fetch(url, { headers: requestHeaders(token), signal: AbortSignal.timeout(timeoutMs) });
   if (!res.ok) {
     const error = new Error(`GitHub responded with ${res.status}`);
@@ -18,10 +18,35 @@ const getJson = async (url, token, timeoutMs = 8000) => {
 };
 
 /**
+ * One retry for failures that are usually temporary: timeouts, dropped connections and 5xx.
+ * A freshly woken free-tier server often fails its very first outbound request.
+ */
+const getJson = async (url, token, { timeoutMs = 12000, attempts = 2 } = {}) => {
+  for (let attempt = 1; ; attempt += 1) {
+    try {
+      return await fetchOnce(url, token, timeoutMs);
+    } catch (err) {
+      const temporary = err.status === undefined || err.status >= 500;
+      if (!temporary || attempt >= attempts) throw err;
+    }
+  }
+};
+
+/**
  * Public numbers for the GitHub section: repos, stars, followers and language share.
  * Forks are left out of stars and languages so they reflect the owner's own work.
  */
 export const fetchGithubSummary = async (username, token) => {
+  try {
+    return await buildSummary(username, token);
+  } catch (err) {
+    // A wrong or expired GITHUB_TOKEN makes GitHub answer 401 even for public data: retry without it
+    if (err.status === 401 && token) return buildSummary(username, undefined);
+    throw err;
+  }
+};
+
+const buildSummary = async (username, token) => {
   const name = encodeURIComponent(username);
 
   const [user, repos] = await Promise.all([
@@ -37,7 +62,10 @@ export const fetchGithubSummary = async (username, token) => {
     own
       .slice(0, 30)
       .map((repo) =>
-        getJson(`${API}/repos/${name}/${encodeURIComponent(repo.name)}/languages`, token, 4000),
+        getJson(`${API}/repos/${name}/${encodeURIComponent(repo.name)}/languages`, token, {
+          timeoutMs: 4000,
+          attempts: 1,
+        }),
       ),
   );
 
