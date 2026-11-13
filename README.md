@@ -13,7 +13,7 @@ A full-stack MERN portfolio with a private admin dashboard, so content is manage
 ![Node.js](https://img.shields.io/badge/Node.js-339933?logo=node.js&logoColor=white)
 ![Express](https://img.shields.io/badge/Express-4-000000?logo=express&logoColor=white)
 ![MongoDB](https://img.shields.io/badge/MongoDB-47A248?logo=mongodb&logoColor=white)
-[![CI](https://github.com/dipakhore979/MY-PORTFOLIO/actions/workflows/ci.yml/badge.svg)](https://github.com/dipakhore979/MY-PORTFOLIO/actions/workflows/ci.yml)
+[![CI](https://github.com/dipakhore-dev/MY-PORTFOLIO/actions/workflows/ci.yml/badge.svg)](https://github.com/dipakhore-dev/MY-PORTFOLIO/actions/workflows/ci.yml)
 
 <img src="docs/screenshots/Home.png" alt="Portfolio homepage" width="820">
 
@@ -177,7 +177,7 @@ These are engineering decisions recorded in the project's code and documentation
 **Dipak Hore**: Full-Stack Developer | AI/ML Enthusiast
 
 - Portfolio: [my-portfolio-sooty-mu-80.vercel.app](https://my-portfolio-sooty-mu-80.vercel.app)
-- GitHub: [github.com/dipakhore979](https://github.com/dipakhore979)
+- GitHub: [github.com/dipakhore-dev](https://github.com/dipakhore-dev)
 - LinkedIn: [linkedin.com/in/dipak-hore](https://www.linkedin.com/in/dipak-hore)
 
 ## License

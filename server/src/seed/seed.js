@@ -13,7 +13,7 @@ const destroyOnly = args.includes('--destroy');
 const adminOnly = args.includes('--admin-only'); // create admin + profile, never touch content
 const force = args.includes('--force');
 
-const GITHUB = 'https://github.com/dipakhore979';
+const GITHUB = 'https://github.com/dipakhore-dev';
 const placeholder = (label) => ({
   url: `https://placehold.co/1200x675/png?text=${encodeURIComponent(label)}`,
   publicId: '',

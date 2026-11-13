@@ -13,7 +13,7 @@ export const site = {
   status: 'Open to new opportunities',
   stack: ['React', 'Node.js', 'Express', 'MongoDB', 'Tailwind CSS'],
   email: 'dipakhore979@gmail.com',
-  github: 'https://github.com/dipakhore979',
+  github: 'https://github.com/dipakhore-dev',
   linkedin: 'https://www.linkedin.com/in/dipak-hore',
   bio: [
     'I am a full-stack developer who enjoys turning ideas into clean, responsive web applications. On the frontend I work with HTML, CSS, JavaScript, React and Tailwind CSS. On the backend I build REST APIs with Node.js and Express, backed by MongoDB.',
