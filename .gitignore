@@ -1,27 +1,50 @@
-# Dependencies
-node_modules
 
-# Environment files (keep the templates)
+# Dependencies
+node_modules/
+
+# Environment files
 .env
 .env.*
-!.env.example
+# Remove the exception for .env.example
 
-# Build output and caches
-dist
-coverage
-.vite
+# Build output
+dist/
+build/
+coverage/
+.vite/
+.cache/
 .eslintcache
 
-# Uploaded files (keep the folder)
+# Local uploaded files
 server/uploads/*
 !server/uploads/.gitkeep
 
 # Logs
 *.log
+logs/
 npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# OS and editor files
-.DS_Store
-Thumbs.db
+# Editor configuration
 .vscode/
 .idea/
+*.swp
+*.swo
+
+# Operating system files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Local deployment metadata
+.vercel/
+.netlify/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Optional: deployment documentation
+# docs/DEPLOYMENT.md
